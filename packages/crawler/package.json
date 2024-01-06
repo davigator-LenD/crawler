@@ -1,0 +1,33 @@
+{
+    "name": "@lendi/crawler",
+    "version": "0.1.0",
+    "description": "Lendi core html crawler",
+    "type": "module",
+    "private": true,
+    "keywords": [],
+    "sideEffects": false,
+    "publishConfig": {
+        "access": "restricted"
+    },
+    "files": [
+        "dist"
+    ],
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "scripts": {
+        "build": "tsup src/index.ts --format=esm --shims --dts",
+        "build:fast": "tsup src/index.ts --format=esm --shims --no-dts",
+        "dev": "pnpm build:fast --sourcemap --watch",
+        "test": "vitest",
+        "test:ci": "vitest run",
+        "test:e2e": "pnpm exec playwright test",
+        "test:e2e:ci": "npm exec playwright show-report"
+    },
+    "dependencies": {
+        "@playwright/test": "^1.14.0",
+        "playwright": "^1.40.1",
+        "crawlee": "^3.7.0",
+        "@lendi/logger": "*workspaces"
+    }
+}
