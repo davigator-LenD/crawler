@@ -1,0 +1,45 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Crawler Debugger",
+            "skipFiles": ["<node_internals>/**"],
+            "program": "${workspaceFolder}/packages/crawler/dist/index.js",
+            "outFiles": ["${workspaceFolder}/**/*.js"]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Api Debugger",
+            "skipFiles": ["<node_internals>/**"],
+            "program": "${workspaceFolder}/packages/api/dist/index.js",
+            "outFiles": ["${workspaceFolder}/**/*.js"]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Cli Debugger",
+            "skipFiles": ["<node_internals>/**"],
+            "program": "${workspaceFolder}/packages/cli/dist/index.js",
+            "outFiles": ["${workspaceFolder}/**/*.js"]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Logger Debugger",
+            "skipFiles": ["<node_internals>/**"],
+            "program": "${workspaceFolder}/packages/logger/dist/index.js",
+            "outFiles": ["${workspaceFolder}/**/*.js"]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Generator Debugger",
+            "skipFiles": ["<node_internals>/**"],
+            "program": "${workspaceFolder}/packages/generator/dist/index.js",
+            "outFiles": ["${workspaceFolder}/**/*.js"]
+        }
+    ]
+}
