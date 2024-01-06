@@ -1,5 +1,5 @@
 {
-    "name": "@lendi/api",
+    "name": "@lend/api",
     "version": "0.1.0",
     "description": "Api request handler",
     "private": true,

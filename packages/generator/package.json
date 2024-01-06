@@ -1,5 +1,5 @@
 {
-    "name": "@lendi/generator",
+    "name": "@lend/generator",
     "version": "0.1.0",
     "description": "Dataset generator for the ai",
     "private": true,
@@ -24,6 +24,6 @@
         "lint:ts": "tsc --noEmit"
     },
     "devDependencies": {
-        "@lendi/logger": "*workspaces"
+        "@lend/logger": "*workspaces"
     }
 }

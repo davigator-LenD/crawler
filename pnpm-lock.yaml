@@ -67,7 +67,7 @@ importers:
 
   packages/cli:
     dependencies:
-      '@lendi/logger':
+      '@lend/logger':
         specifier: '*workspaces'
         version: link:../logger
       '@metal-box/type':
@@ -91,7 +91,7 @@ importers:
 
   packages/crawler:
     dependencies:
-      '@lendi/logger':
+      '@lend/logger':
         specifier: '*workspaces'
         version: link:../logger
       '@playwright/test':
@@ -106,7 +106,7 @@ importers:
 
   packages/generator:
     devDependencies:
-      '@lendi/logger':
+      '@lend/logger':
         specifier: '*workspaces'
         version: link:../logger
 
