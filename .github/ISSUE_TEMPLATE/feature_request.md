@@ -1,36 +1,20 @@
 ---
 name: Feature request
-about: Suggest an idea for this project
+about: LenD PR template
 title: "[feature-request] Write your features"
 labels: feature request
-assignees: danpacho
 ---
 
-<!---
-Thanks for creating a Pull Request :)
+## Summary
 
-Please read the following before submitting:
-- Keep your PR as small as possible.
-- PRs that adds new external dependencies might take a while to review.
-- Limit your PR to one type (docs, feature, refactoring, ci, or bugfix)
--->
+issue 요약
 
-Closes # <!-- Github issue # here -->
+## Description
 
-## 📝 Description
+-   Issue 리스트(생략 가능)
 
-> Add a brief description
+---
 
-## 💪 Current behavior
+### Example
 
-> Please describe the current behavior that you are modifying
-
-## 🦾 New behavior
-
-> Please describe the behavior or changes this PR adds
-
-## 💣 Breaking change (y/n):
-
-<!-- If Yes, please describe the impact and migration path for existing users. -->
-
-## 📝 Additional Information
+예제 코드(생략 가능)
