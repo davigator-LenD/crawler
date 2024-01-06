@@ -1,0 +1,26 @@
+{
+    "name": "@lendi/api",
+    "version": "0.1.0",
+    "description": "Api request handler",
+    "private": true,
+    "keywords": [],
+    "sideEffects": false,
+    "publishConfig": {
+        "access": "restricted"
+    },
+    "files": [
+        "dist"
+    ],
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "scripts": {
+        "build": "tsup src/index.ts --format=esm,cjs --shims --dts",
+        "build:fast": "tsup src/index.ts --format=esm,cjs --shims --no-dts",
+        "dev": "tsup src/index.ts --format=esm,cjs --shims --no-dts --sourcemap --watch",
+        "format": "prettier --write \"./{src,tests}/**/*\"",
+        "test": "vitest",
+        "test:ci": "vitest run",
+        "lint:ts": "tsc --noEmit"
+    }
+}
