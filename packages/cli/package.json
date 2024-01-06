@@ -1,0 +1,39 @@
+{
+    "name": "@lendi/cli",
+    "version": "0.1.0",
+    "description": "Core cli",
+    "private": true,
+    "keywords": [],
+    "type": "module",
+    "sideEffects": false,
+    "bin": {
+        "smith": "./dist/src/index.js"
+    },
+    "publishConfig": {
+        "access": "restricted"
+    },
+    "files": [
+        "dist"
+    ],
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "scripts": {
+        "build": "tsup src/index.ts --format=esm,cjs --shims --dts",
+        "build:fast": "tsup src/index.ts --format=esm,cjs --shims --no-dts",
+        "dev": "pnpm build:fast --sourcemap --watch",
+        "format": "prettier --write \"./{src,tests}/**/*\"",
+        "test": "vitest",
+        "test:ci": "vitest run",
+        "lint:ts": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@metal-box/type": "^0.1.1",
+        "@lendi/logger": "*workspaces",
+        "@types/inquirer": "^9.0.7",
+        "commander": "^11.1.0",
+        "cross-env": "^7.0.3",
+        "inquirer": "^9.2.12",
+        "ts-node": "^10.9.2"
+    }
+}
