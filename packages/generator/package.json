@@ -4,6 +4,7 @@
     "description": "Dataset generator for the ai",
     "private": true,
     "keywords": [],
+    "type": "module",
     "sideEffects": false,
     "publishConfig": {
         "access": "restricted"
