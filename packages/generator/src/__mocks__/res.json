@@ -1,0 +1,167 @@
+{
+    "url": "https://naver.com",
+    "description": "page meta tag data",
+    "title": "page title tag data",
+    "node": [
+        {
+            "node_type": "text",
+            "content": "Hello, world!",
+            "selector": "#id1",
+            "independent": false,
+            "level": 1,
+            "relevance": [0, 3],
+            "children": [
+                {
+                    "node_type": "text",
+                    "content": "Apple is delicious.",
+                    "selector": "#id2",
+                    "independent": false,
+                    "level": 3,
+                    "relevance": [1, 7],
+                    "children": [
+                        {
+                            "node_type": "text",
+                            "content": "Apple is delicious.",
+                            "selector": "#id2",
+                            "independent": false,
+                            "level": 3,
+                            "relevance": [2, 9],
+                            "children": null
+                        },
+                        {
+                            "node_type": "text",
+                            "content": "Chat bot, ask anything.",
+                            "selector": ".id3",
+                            "independent": true,
+                            "level": 7,
+                            "relevance": [3, 9],
+                            "children": [
+                                {
+                                    "node_type": "text",
+                                    "content": "Apple is delicious.",
+                                    "selector": "#id2",
+                                    "independent": false,
+                                    "level": 3,
+                                    "relevance": [4, 10],
+                                    "children": null
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "node_type": "text",
+                    "content": "Chat bot, ask anything.",
+                    "selector": ".id3",
+                    "independent": true,
+                    "level": 7,
+                    "relevance": [5, 7],
+                    "children": null
+                }
+            ]
+        },
+        {
+            "node_type": "text",
+            "content": "Apple is delicious.",
+            "selector": "#id2",
+            "independent": false,
+            "level": 3,
+            "relevance": [6, 2],
+            "children": null
+        },
+        {
+            "node_type": "action",
+            "selector": "#id1",
+            "type": "button",
+            "independent": false,
+            "relevance": [7, 10],
+            "children": [
+                {
+                    "node_type": "text",
+                    "selector": "#id2",
+                    "type": "input",
+                    "independent": false,
+                    "relevance": [8, 12],
+                    "children": null
+                },
+                {
+                    "node_type": "text",
+                    "selector": ".id3",
+                    "type": "textarea",
+                    "independent": false,
+                    "relevance": [9, 12],
+                    "children": null
+                }
+            ]
+        },
+        {
+            "node_type": "action",
+            "selector": "#id2",
+            "type": "input",
+            "independent": false,
+            "relevance": [10, 3],
+            "children": null
+        },
+        {
+            "node_type": "action",
+            "selector": ".id3",
+            "type": "textarea",
+            "independent": false,
+            "relevance": [11, 3],
+            "children": null
+        },
+        {
+            "node_type": "link",
+            "selector": "#id1",
+            "href": "https://www.google.com",
+            "description": "Google",
+            "independent": false,
+            "relevance": [12, 3],
+            "external": false,
+            "children": null
+        },
+        {
+            "node_type": "link",
+            "selector": "#id2",
+            "href": "https://www.google.com/1",
+            "description": "How to make an apple pie",
+            "independent": false,
+            "relevance": [13, 4],
+            "external": false,
+            "children": [
+                {
+                    "node_type": "link",
+                    "selector": ".id3",
+                    "href": "https://www.google.com",
+                    "independent": false,
+                    "description": "invite google I/O",
+                    "relevance": [14, 7],
+                    "external": false,
+                    "children": null
+                }
+            ]
+        },
+        {
+            "node_type": "contents",
+            "selector": null,
+            "content": "Hello, world!",
+            "type": "image",
+            "src": "https://www.google.com/image/1",
+            "description": "Google icon says hello to developers",
+            "independent": false,
+            "relevance": [15, 6],
+            "children": null
+        },
+        {
+            "node_type": "contents",
+            "selector": "#id10",
+            "content": "Apple is delicious.",
+            "type": "image",
+            "src": "https://www.google.com/image/2",
+            "description": "Apple pie",
+            "independent": false,
+            "relevance": [16, 7],
+            "children": null
+        }
+    ]
+}
