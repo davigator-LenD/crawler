@@ -21,15 +21,15 @@ export class ActionNode extends DataNode {
     }
     public type: "button" | "input" | "textarea" | "select" | "option" | "form"
 
-    public static override Tags: string[] = [
+    public static override Tags: Set<string> = new Set([
         "button",
         "input",
         "textarea",
         "select",
         "option",
         "form",
-    ]
+    ])
     public static override is(tagName: string): tagName is ActionNode["type"] {
-        return ActionNode.Tags.includes(tagName)
+        return ActionNode.Tags.has(tagName)
     }
 }

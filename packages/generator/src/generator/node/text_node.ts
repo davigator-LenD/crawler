@@ -8,7 +8,7 @@ export class TextNode extends DataNode {
     }: DataNodeChildConstructorOption) {
         super({ text, selector, relevance, node_type: "text" })
     }
-    public static override Tags: string[] = [
+    public static override Tags: Set<string> = new Set([
         "p",
         "h1",
         "h2",
@@ -18,7 +18,7 @@ export class TextNode extends DataNode {
         "h6",
         "div",
         "span",
-    ]
+    ])
     public static override is(
         tagName: string
     ): tagName is
@@ -31,6 +31,6 @@ export class TextNode extends DataNode {
         | "h6"
         | "div"
         | "span" {
-        return TextNode.Tags.includes(tagName)
+        return TextNode.Tags.has(tagName)
     }
 }

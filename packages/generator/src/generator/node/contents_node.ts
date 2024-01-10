@@ -21,8 +21,8 @@ export class ContentsNode extends DataNode {
     public readonly type: "img" = "img" as const
     public readonly src: string
 
-    public static override Tags: string[] = ["img"]
+    public static override Tags: Set<string> = new Set(["img"])
     public static override is(tagName: string): tagName is "img" {
-        return ContentsNode.Tags.includes(tagName)
+        return ContentsNode.Tags.has(tagName)
     }
 }

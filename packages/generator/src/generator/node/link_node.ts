@@ -21,8 +21,8 @@ export class LinkNode extends DataNode {
         this.href = href
     }
 
-    public static override Tags: string[] = ["a"]
+    public static override Tags: Set<string> = new Set(["a"])
     public static override is(tagName: string): tagName is "a" {
-        return LinkNode.Tags.includes(tagName)
+        return LinkNode.Tags.has(tagName)
     }
 }

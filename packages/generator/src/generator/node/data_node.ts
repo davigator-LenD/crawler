@@ -1,22 +1,24 @@
+type NullableString = string | null
 interface DataNodeConstructorOptions {
-    text: string
+    text: NullableString
     relevance: readonly [number, number]
-    selector: string | undefined
+    selector: NullableString
     node_type: string
 }
 export type DataNodeChildConstructorOption = Omit<
     DataNodeConstructorOptions,
     "node_type"
 >
+
 export abstract class DataNode {
     /**
      * @description text data
      */
-    public readonly text: string
+    public readonly text: NullableString
     /**
      * @description unique selector for tag node
      */
-    public readonly selector: string | undefined
+    public readonly selector: NullableString
     /**
      * @description `[node_index, node_depth]`
      */
@@ -35,7 +37,7 @@ export abstract class DataNode {
     /**
      * @description category of data node tags
      */
-    public static readonly Tags: string[]
+    public static readonly Tags: Set<string>
     /**
      * @description get current tagName is in data node category
      */
