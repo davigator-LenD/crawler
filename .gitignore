@@ -42,5 +42,7 @@ pnpm-debug.log*
 /blob-report/
 /playwright/.cache/
 
-# Storage
+# Test Storage
 storage
+suites
+__snapshots__

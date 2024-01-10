@@ -73,7 +73,3 @@ export class Logger {
         return " ".repeat(this._spaceSize)
     }
 }
-
-const a = "b"
-
-console.log(a)
