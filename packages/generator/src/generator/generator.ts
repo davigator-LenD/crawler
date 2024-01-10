@@ -58,16 +58,15 @@ export class Generator {
     }
 
     /**
-     * @description
+     * @description Combine nodes by relevance
      * @example
      * ```html
-        // <a href="link url">text<div>inner text</div></a>
-        // <div>text</div>
-        // <div text2</div>
+        <a href="link url">text<div>inner text</div></a>
+        <div>text</div>
+        <div text2</div>
      * ```
      * @param prevNode
      * @param currNode
-     * @returns
      */
     private combineNode(
         prevNode: DataNode | undefined,
@@ -106,16 +105,20 @@ export class Generator {
             ] as const
 
             if (
-                prevNode.node_type === "link" ||
-                currNode.node_type === "link"
+                (prevNode.node_type === "link" ||
+                    currNode.node_type === "link") &&
+                prevNode.node_type !== currNode.node_type
             ) {
                 this.pop()
+                const href = (currNode as LinkNode).href
+                    ? (currNode as LinkNode).href
+                    : (prevNode as LinkNode).href
 
                 const linkNode = new LinkNode({
                     text,
+                    href,
                     selector: id,
                     relevance: avgRelevance,
-                    href: (prevNode as LinkNode).href,
                 })
                 return linkNode
             }
@@ -135,6 +138,12 @@ export class Generator {
         }
 
         return currNode
+    }
+
+    private isValidUrl(url: string): boolean {
+        const urlRegex =
+            /^(https?):\/\/([a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)(\/[a-zA-Z0-9-_/]*)(\?[a-zA-Z0-9-_&=]*)?(#[a-zA-Z0-9-_]*)?$|^\/[a-zA-Z0-9-_/]*(\?[a-zA-Z0-9-_&=]*)?(#[a-zA-Z0-9-_]*)?$/
+        return urlRegex.test(url) || url.startsWith("#")
     }
 
     private walk(node: TagNode): void {
@@ -192,12 +201,13 @@ export class Generator {
             }
         } else if (LinkNode.is(tagName)) {
             const href = attributes.href
-            if (href) {
+            const isValidUrl = href ? this.isValidUrl(href) : false
+            if (isValidUrl) {
                 const linkNode = new LinkNode({
                     text: innerText ? this.purifyText(innerText) : null,
                     selector: id,
                     relevance,
-                    href,
+                    href: href!,
                 })
                 const combined = this.combineNode(this.top(), linkNode)
                 this.push(combined)
