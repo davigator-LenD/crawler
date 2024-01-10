@@ -45,3 +45,4 @@ pnpm-debug.log*
 # Test Storage
 storage
 suites
+__snapshots__
