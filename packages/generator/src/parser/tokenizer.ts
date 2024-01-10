@@ -100,16 +100,23 @@ export class Tokenizer {
             }
         }
 
+        if (char === "=") {
+            this.log("Assignment")
+            return {
+                type: "ASSIGNMENT",
+                value: "=",
+            }
+        }
+
         const attributeRegex = /['"]/
         if (attributeRegex.test(char)) {
             let text: string = ""
             let innerChar: string = this.char(1)
             while (
                 !attributeRegex.test(innerChar) &&
-                innerChar !== "=" &&
+                innerChar !== ";" &&
                 innerChar !== ">" &&
-                innerChar !== "<" &&
-                innerChar !== ";"
+                innerChar !== "<"
             ) {
                 text += innerChar
                 innerChar = this.char(1)
@@ -119,14 +126,6 @@ export class Tokenizer {
             return {
                 type: "ATTRIBUTE",
                 value: text,
-            }
-        }
-
-        if (char === "=") {
-            this.log("Assignment")
-            return {
-                type: "ASSIGNMENT",
-                value: "=",
             }
         }
 
