@@ -30,15 +30,12 @@ export class Parser {
     private push(tagNode: TagNode): void {
         this.parentStack.push(tagNode)
     }
-    private depth(): number {
-        return this.parentStack.length
+    private depth: number = 0
+    private increaseDepth(): void {
+        this.depth++
     }
-    private pushChildren(): void {
-        const children = this.top()
-        if (children) {
-            const parent = this.parentStack[this.parentStack.length - 2]
-            parent?.addChild(children)
-        }
+    private decreaseDepth(): void {
+        this.depth--
     }
 
     private increaseNodeIndex(): void {
@@ -66,24 +63,62 @@ export class Parser {
     }
     private findUntil(target: Token["type"]): Token {
         while (this.isEOF === false) {
-            this.pointer++
-            const token = this.token()
+            const token = this.token(1)
             if (token?.type === target) {
                 return token
             }
         }
-
         throw new SyntaxError(`Expect ${target}, but reached EOF`)
+    }
+    private findUntilTargetRange(targetList: Set<Token["type"]>): Token {
+        while (this.isEOF === false) {
+            const token = this.token(1)
+            if (targetList.has(token?.type as Token["type"])) {
+                return token!
+            }
+        }
+        throw new SyntaxError(`Expect ${targetList}, but reached EOF`)
+    }
+
+    private pushChildren(): void {
+        const children = this.top()
+        if (children) {
+            const parent = this.parentStack[this.parentStack.length - 2]
+            parent?.addChild(children)
+
+            this.decreaseDepth()
+            this.pop()
+        }
     }
 
     /**
      * @description Parse `HTML` AST
      */
-    public parse(): TagNode[] {
+    public parse(): TagNode {
         while (this.isEOF === false) {
             this.TAG_OPEN()
         }
-        return this.ast
+        this.generateAST()
+        const ast = this.ast[0]
+        if (ast === undefined) {
+            throw new SyntaxError("Empty AST")
+        }
+        return ast
+    }
+
+    private generateAST(): void {
+        const combinedAST = this.ast.reduceRight<TagNode>(
+            (acc, curr, i, tot) => {
+                const nextParent = tot[i - 1]
+                if (nextParent) {
+                    nextParent.addChild(curr)
+                }
+                return acc
+            },
+            this.ast[0] as TagNode
+        )
+
+        this.ast = [combinedAST]
     }
 
     /**
@@ -96,17 +131,17 @@ export class Parser {
      */
     private TAG_OPEN() {
         const openTag = this.findUntil("TAG_OPEN")
-
         const tagNode = new TagNode({
             tagName: openTag.value,
-            depth: this.depth(),
+            depth: this.depth,
             index: this.nodeIndex,
         })
         this.push(tagNode)
+
         this.increaseNodeIndex()
+        this.increaseDepth()
 
         const nextToken = this.getNextToken()
-
         switch (nextToken?.type) {
             case "TEXT": {
                 this.ATTR()
@@ -166,14 +201,20 @@ export class Parser {
         this.findUntil("TAG_PAIR")
         const prevToken = this.getPrevToken()
         if (prevToken?.type === "TAG_CLOSE") {
-            this.pushChildren()
             if (this.isEOF) {
                 this.ast.push(...this.parentStack)
                 return
-            } else {
-                this.pop()
             }
+            this.pushChildren()
         }
+
+        // ----> exception = <div> >>>> </div> skip contiguous TAG_PAIR
+        let nextTokenForError = this.token(1)
+        while (nextTokenForError?.type === "TAG_PAIR") {
+            nextTokenForError = this.token(1)
+        }
+        this.pointer--
+
         this.TAG_INNER()
     }
 
@@ -196,8 +237,11 @@ export class Parser {
      */
     private TAG_SELF_CLOSE(): void {
         this.findUntil("TAG_SELF_CLOSE")
+        if (this.isEOF) {
+            this.ast.push(...this.parentStack)
+            return
+        }
         this.pushChildren()
-        this.pop()
         this.TAG_INNER()
     }
 
@@ -212,6 +256,11 @@ export class Parser {
      */
     private TAG_INNER(): void {
         const nextToken = this.getNextToken()
+        const validTokenList = new Set<Token["type"]>([
+            "TEXT",
+            "TAG_OPEN",
+            "TAG_CLOSE",
+        ])
         switch (nextToken?.type) {
             case "TEXT": {
                 const text = this.TEXT()
@@ -227,6 +276,13 @@ export class Parser {
                 this.TAG_CLOSE()
                 break
             }
+            case "ASSIGNMENT": {
+                // ----> exception = <div> =hello </div>
+                this.findUntilTargetRange(validTokenList)
+                this.pointer--
+                this.TAG_INNER()
+                break
+            }
             default: {
                 break // ℇ
             }
@@ -240,6 +296,14 @@ export class Parser {
      */
     private TEXT(): string {
         const text = this.findUntil("TEXT")
+
+        // ----> exception = <div> h===el>>==>>lo </div>
+        let nextTokenForError = this.token(1)
+        while (nextTokenForError?.type === "TAG_PAIR") {
+            nextTokenForError = this.token(1)
+        }
+        this.pointer--
+
         return text.value
     }
     /**
@@ -249,6 +313,12 @@ export class Parser {
      */
     private ASSIGNMENT(): void {
         this.findUntil("ASSIGNMENT")
+        // ----> exception = <div id======"hello"> </div>
+        let nextTokenForError = this.token(1)
+        while (nextTokenForError?.type === "ASSIGNMENT") {
+            nextTokenForError = this.token(1)
+        }
+        this.pointer--
     }
     /**
      * ```html
@@ -257,6 +327,14 @@ export class Parser {
      */
     private ATTRIBUTE(): string {
         const attribute = this.findUntil("ATTRIBUTE")
-        return attribute.value
+        let attributeValue = attribute.value
+        // ----> exception = <a href="https://naver.com?Category=name?label=text" />
+        let nextTokenForError = this.token(1)
+        while (nextTokenForError?.type === "ASSIGNMENT") {
+            attributeValue += nextTokenForError.value
+            nextTokenForError = this.token(1)
+        }
+        this.pointer--
+        return attributeValue
     }
 }
