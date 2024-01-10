@@ -1,9 +1,2 @@
-const mom = (a: string) => console.log(a)
-mom("hello")
-
-const apple = "apple"
-mom(apple)
-export const box = {
-    a: "box",
-    b: "boxme",
-}
+export * from "./parser/index.js"
+export * from "./generator/index.js"
