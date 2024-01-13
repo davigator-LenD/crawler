@@ -143,6 +143,7 @@ export class Generator {
     private isValidUrl(url: string): boolean {
         const urlRegex =
             /^(https?):\/\/([a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)(\/[a-zA-Z0-9-_/]*)(\?[a-zA-Z0-9-_&=]*)?(#[a-zA-Z0-9-_]*)?$|^\/[a-zA-Z0-9-_/]*(\?[a-zA-Z0-9-_&=]*)?(#[a-zA-Z0-9-_]*)?$/
+
         return urlRegex.test(url) || url.startsWith("#")
     }
 
