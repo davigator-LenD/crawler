@@ -10,6 +10,12 @@ export class TextNode extends DataNode {
     }
     public static override Tags: Set<string> = new Set([
         "p",
+        "b",
+        "i",
+        "em",
+        "strong",
+        "mark",
+        "small",
         "h1",
         "h2",
         "h3",
