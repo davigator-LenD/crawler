@@ -91,6 +91,9 @@ importers:
 
   packages/crawler:
     dependencies:
+      '@lend/generator':
+        specifier: '*workspaces'
+        version: link:../generator
       '@lend/logger':
         specifier: '*workspaces'
         version: link:../logger
