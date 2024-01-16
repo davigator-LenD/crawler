@@ -45,7 +45,15 @@ export class Tokenizer {
         if (!this.logOff) lg.log(message)
     }
 
+    private reset(): void {
+        this.rawString = ""
+        this.pointer = -1
+        this.tokenStream = []
+        this.log("reset")
+    }
+
     public init(input: string) {
+        this.reset()
         this.log("initializing")
         this.rawString = input.replace(/\n/g, "")
         this.log("initializing succeed")
