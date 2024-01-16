@@ -18,7 +18,16 @@ export class Parser {
     private ast: TagNode[] = []
 
     public init(tokenStream: Token[]) {
+        this.reset()
         this.tokenStream = tokenStream
+    }
+
+    private reset(): void {
+        this.pointer = -1
+        this.nodeIndex = 0
+        this.depth = 0
+        this.parentStack = []
+        this.ast = []
     }
 
     private top(): TagNode | undefined {
