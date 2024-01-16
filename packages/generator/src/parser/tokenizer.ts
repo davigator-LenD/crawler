@@ -45,7 +45,15 @@ export class Tokenizer {
         if (!this.logOff) lg.log(message)
     }
 
+    private reset(): void {
+        this.rawString = ""
+        this.pointer = -1
+        this.tokenStream = []
+        this.log("reset")
+    }
+
     public init(input: string) {
+        this.reset()
         this.log("initializing")
         this.rawString = input.replace(/\n/g, "")
         this.log("initializing succeed")
@@ -110,14 +118,12 @@ export class Tokenizer {
 
         const attributeRegex = /['"]/
         if (attributeRegex.test(char)) {
+            const isSingleQuote = char === "'"
+            const charTester = isSingleQuote ? /'/ : /"/
+
             let text: string = ""
             let innerChar: string = this.char(1)
-            while (
-                !attributeRegex.test(innerChar) &&
-                innerChar !== ";" &&
-                innerChar !== ">" &&
-                innerChar !== "<"
-            ) {
+            while (!charTester.test(innerChar)) {
                 text += innerChar
                 innerChar = this.char(1)
             }
@@ -172,7 +178,8 @@ export class Tokenizer {
         while (
             !this.IsSpace &&
             this.pointer < this.rawString.length &&
-            char !== ">"
+            char !== ">" &&
+            char !== "<"
         ) {
             tagName += char
             char = this.char(1)

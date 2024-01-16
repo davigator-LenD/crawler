@@ -5,11 +5,25 @@ export class TextNode extends DataNode {
         text,
         selector,
         relevance,
+        tokens,
     }: DataNodeChildConstructorOption) {
-        super({ text, selector, relevance, node_type: "text" })
+        super({ tokens, text, selector, relevance, node_type: "text" })
     }
     public static override Tags: Set<string> = new Set([
         "p",
+        "b",
+        "i",
+        "em",
+        "strong",
+        "mark",
+        "small",
+        "th",
+        "td",
+        "ul",
+        "li",
+        "ol",
+        "dd",
+        "dt",
         "h1",
         "h2",
         "h3",

@@ -10,8 +10,10 @@ export class ActionNode extends DataNode {
         selector,
         relevance,
         type,
+        tokens,
     }: ActionNodeConstructorOptions) {
         super({
+            tokens,
             text,
             selector,
             relevance,

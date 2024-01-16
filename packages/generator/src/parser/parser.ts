@@ -18,7 +18,16 @@ export class Parser {
     private ast: TagNode[] = []
 
     public init(tokenStream: Token[]) {
+        this.reset()
         this.tokenStream = tokenStream
+    }
+
+    private reset(): void {
+        this.pointer = -1
+        this.nodeIndex = 0
+        this.depth = 0
+        this.parentStack = []
+        this.ast = []
     }
 
     private top(): TagNode | undefined {
@@ -84,10 +93,12 @@ export class Parser {
         const children = this.top()
         if (children) {
             const parent = this.parentStack[this.parentStack.length - 2]
-            parent?.addChild(children)
+            if (parent) {
+                parent.addChild(children)
 
-            this.decreaseDepth()
-            this.pop()
+                this.decreaseDepth()
+                this.pop()
+            }
         }
     }
 
@@ -131,6 +142,8 @@ export class Parser {
      */
     private TAG_OPEN() {
         const openTag = this.findUntil("TAG_OPEN")
+        if (openTag.value === "") return
+
         const tagNode = new TagNode({
             tagName: openTag.value,
             depth: this.depth,
@@ -202,7 +215,7 @@ export class Parser {
         const prevToken = this.getPrevToken()
         if (prevToken?.type === "TAG_CLOSE") {
             if (this.isEOF) {
-                this.ast.push(...this.parentStack)
+                this.ast = this.parentStack
                 return
             }
             this.pushChildren()
@@ -238,13 +251,18 @@ export class Parser {
     private TAG_SELF_CLOSE(): void {
         this.findUntil("TAG_SELF_CLOSE")
         if (this.isEOF) {
-            this.ast.push(...this.parentStack)
+            this.ast = this.parentStack
             return
         }
         this.pushChildren()
         this.TAG_INNER()
     }
 
+    private TAG_INNER_VALID_TOKEN_LIST = new Set<Token["type"]>([
+        "TEXT",
+        "TAG_OPEN",
+        "TAG_CLOSE",
+    ])
     /**
      * ```html
      * <TAG_INNER>
@@ -256,11 +274,7 @@ export class Parser {
      */
     private TAG_INNER(): void {
         const nextToken = this.getNextToken()
-        const validTokenList = new Set<Token["type"]>([
-            "TEXT",
-            "TAG_OPEN",
-            "TAG_CLOSE",
-        ])
+
         switch (nextToken?.type) {
             case "TEXT": {
                 const text = this.TEXT()
@@ -278,7 +292,7 @@ export class Parser {
             }
             case "ASSIGNMENT": {
                 // ----> exception = <div> =hello </div>
-                this.findUntilTargetRange(validTokenList)
+                this.findUntilTargetRange(this.TAG_INNER_VALID_TOKEN_LIST)
                 this.pointer--
                 this.TAG_INNER()
                 break

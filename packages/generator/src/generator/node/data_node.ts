@@ -4,6 +4,7 @@ interface DataNodeConstructorOptions {
     relevance: readonly [number, number]
     selector: NullableString
     node_type: string
+    tokens: string[] | null
 }
 export type DataNodeChildConstructorOption = Omit<
     DataNodeConstructorOptions,
@@ -14,21 +15,29 @@ export abstract class DataNode {
     /**
      * @description text data
      */
-    public readonly text: NullableString
+    public readonly text: DataNodeConstructorOptions["text"]
     /**
      * @description unique selector for tag node
      */
-    public readonly selector: NullableString
+    public readonly selector: DataNodeConstructorOptions["selector"]
     /**
      * @description `[node_index, node_depth]`
      */
-    public readonly relevance: readonly [number, number]
+    public readonly relevance: DataNodeConstructorOptions["relevance"]
     /**
      * @description `TEXT` | `ACTION` | `CONTENTS` | `LINK`
      */
-    public readonly node_type: string
+    public readonly node_type: DataNodeConstructorOptions["node_type"]
+    /**
+     * @description text search tokens
+     */
+    public readonly tokens: DataNodeChildConstructorOption["tokens"]
+
     public constructor(option: DataNodeConstructorOptions) {
         this.text = option.text
+
+        this.tokens = option.tokens
+
         this.selector = option.selector
         this.relevance = option.relevance
         this.node_type = option.node_type

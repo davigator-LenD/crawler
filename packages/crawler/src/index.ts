@@ -1,21 +1,10 @@
-import { PlaywrightCrawler } from "crawlee"
+import { createCrawler } from "./create_crawler.js"
 
-// PlaywrightCrawler crawls the web using a headless browser controlled by the Playwright library.
-const crawler = new PlaywrightCrawler({
-    // Use the requestHandler to process each of the crawled pages.
-    async requestHandler({ request, page, enqueueLinks, pushData, log }) {
-        const title = await page.title()
-        log.info(`Title of ${request.loadedUrl} is '${title}'`)
+const target = {
+    govern24: "https://www.gov.kr/portal",
+    kb: "https://www.kbstar.com", // -> enqueueLinks가 동작하지 않는 문제
+    governPolicy: "https://www.korea.kr",
+} as const
 
-        // Save results as JSON to `./storage/datasets/default` directory.
-        await pushData({ title, url: request.loadedUrl })
-
-        // Extract links from the current page and add them to the crawling queue.
-        await enqueueLinks()
-    },
-    // Uncomment this option to see the browser window.
-    // headless: false,
-    maxRequestsPerCrawl: 20,
-})
-
-export { crawler }
+const instance = await createCrawler(target.governPolicy)
+await instance.run()

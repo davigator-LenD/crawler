@@ -25,9 +25,11 @@
         "test:e2e:ci": "npm exec playwright show-report"
     },
     "dependencies": {
+        "@lend/generator": "*workspaces",
+        "@lend/logger": "*workspaces",
         "@playwright/test": "^1.14.0",
-        "playwright": "^1.40.1",
         "crawlee": "^3.7.0",
-        "@lend/logger": "*workspaces"
+        "playwright": "^1.40.1",
+        "puppeteer": "^21.7.0"
     }
 }

@@ -9,9 +9,11 @@ export class ContentsNode extends DataNode {
         selector,
         relevance,
         src,
+        tokens,
     }: TagNodeConstructorOptions) {
         super({
             text,
+            tokens,
             selector,
             relevance,
             node_type: "contents",
