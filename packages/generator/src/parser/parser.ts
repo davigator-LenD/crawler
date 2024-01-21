@@ -105,15 +105,12 @@ export class Parser {
     /**
      * @description Parse `HTML` AST
      */
-    public parse(): TagNode {
+    public parse(): TagNode | undefined {
         while (this.isEOF === false) {
             this.TAG_OPEN()
         }
         this.generateAST()
         const ast = this.ast[0]
-        if (ast === undefined) {
-            throw new SyntaxError("Empty AST")
-        }
         return ast
     }
 
