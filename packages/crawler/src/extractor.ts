@@ -14,15 +14,19 @@ export interface ExtractorOptions {
     generatorOptions: GeneratorConstructorOption
     textPreprocessorOptions: TextPreprocessorConstructorOption
 }
+interface ExtractorSpec extends GeneratorSpec {
+    href: string | null
+}
 export class Extractor {
     private readonly $tokenizer: Tokenizer
     private readonly $parser: Parser
     private readonly $generator: Generator
     private readonly $lg: Logger
 
-    private result: GeneratorSpec = {
+    private result: ExtractorSpec = {
         nodes: [],
         meta: null,
+        href: null,
     }
 
     private isHtmlSet: boolean = false
@@ -74,21 +78,33 @@ export class Extractor {
         this.result = {
             nodes: [],
             meta: null,
+            href: null,
         }
     }
 
-    public parse(): GeneratorSpec {
+    public parse(
+        { meta, href }: { meta?: string | null; href: string | null } = {
+            meta: null,
+            href: null,
+        }
+    ): ExtractorSpec {
         if (!this.isHtmlSet) {
             this.$lg.error("HTML is not set")
-            return this.result
+            return { ...this.result, href: null }
         }
 
         try {
-            this.result = this.$generator.generate()
+            const generated = this.$generator.generate()
 
             this.$lg.success("Generation success")
-            this.$lg.log(`node length: ${this.result.nodes.length}`)
+            this.$lg.log(`Node length: ${generated.nodes.length}`)
 
+            const result: ExtractorSpec = {
+                nodes: generated.nodes,
+                meta: generated.meta || (meta ?? null),
+                href: href ?? null,
+            }
+            this.result = result
             return this.result
         } catch (e) {
             if (e instanceof Error) {
