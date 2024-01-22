@@ -3,3 +3,4 @@ pnpm-lock.yaml
 **/*.d.ts
 **/*.d.mts
 **/*.d.cts
+__mocks__

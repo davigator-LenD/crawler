@@ -187,9 +187,8 @@ export class Generator {
                 : []
 
             if (
-                (prevNode.node_type === "link" ||
-                    currNode.node_type === "link") &&
-                prevNode.node_type !== currNode.node_type
+                prevNode.node_type === "link" ||
+                currNode.node_type === "link"
             ) {
                 this.pop()
 
@@ -291,12 +290,14 @@ export class Generator {
         const validateUrl = (url: string | null | undefined): boolean => {
             if (url === null || url === undefined) return false
 
-            const urlRegex =
-                /^(https?):\/\/([a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)(\/[a-zA-Z0-9-_/]*)(\?[a-zA-Z0-9-_&=]*)?(#[a-zA-Z0-9-_]*)?$|^\/[a-zA-Z0-9-_/]*(\?[a-zA-Z0-9-_&=]*)?(#[a-zA-Z0-9-_]*)?$/
-
-            return urlRegex.test(url)
             //TODO: [ HOW_TO ] internal link like #id
-            // || url.startsWith("#")
+            try {
+                const toUrl = url.startsWith("/") ? `https://${url}` : url
+                new URL(toUrl)
+                return true
+            } catch (_) {
+                return false
+            }
         }
 
         const href = attributes.href
@@ -388,14 +389,17 @@ export class Generator {
         this.meta = null
     }
 
-    public init(ast: TagNode) {
+    public init(ast: TagNode | undefined) {
         this.reset()
         this.ast = ast
     }
 
     public generate(): GeneratorSpec {
         if (!this.ast) {
-            throw new Error("ast가 초기화되지 않았습니다.")
+            return {
+                nodes: [],
+                meta: null,
+            }
         }
 
         this.walk(this.ast)
